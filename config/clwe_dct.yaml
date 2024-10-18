@@ -1,0 +1,9 @@
+include: [
+  "config/basic_clwe.yaml",
+]
+
+watermark:
+  gamma: 0.025
+  dct: True
+
+output_path: "./images/clwe_dct/"

@@ -1,0 +1,12 @@
+dataset: "Gustavosta/Stable-Diffusion-Prompts"
+seed: 42
+device: ???
+
+pipeline:
+  model_id: "stabilityai/stable-diffusion-2-1-base"
+  guidance_scale: 7.5
+  num_inference_steps: 50
+  image_width: 512
+  device: ${device}
+
+output_path: "./images/no_wm/"

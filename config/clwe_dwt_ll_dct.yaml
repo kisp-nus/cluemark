@@ -1,0 +1,10 @@
+include: [
+  "config/basic_clwe.yaml",
+]
+
+watermark:
+  gamma: 0.035
+  dct: True
+  dwt_bands: ["LL"]
+
+output_path: "./images/clwe_dwt_ll_dct/"
