@@ -4,9 +4,11 @@ device: ???
 
 pipeline:
   model_id: "stabilityai/stable-diffusion-2-1-base"
-  guidance_scale: 7.5
+  guidance_scale: 3.0
   num_inference_steps: 50
   image_width: 512
   device: ${device}
+  solver_order: 1
+  dtype: float32
 
 output_path: "./images/no_wm/"
