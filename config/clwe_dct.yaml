@@ -3,7 +3,8 @@ include: [
 ]
 
 watermark:
-  gamma: 0.025
+  gamma: 0.035
+  beta: 1
   dct: True
 
 output_path: "./images/clwe_dct/"

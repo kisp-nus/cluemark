@@ -4,6 +4,10 @@ from scipy import fft, stats
 import pywt
 
 
+def get_random_samples(dims, var=1/4):
+    g = np.random.default_rng()
+    return g.normal(0, var, size=dims)
+
 def sample_unit_vector(secret_dim, seed=42):
     g = np.random.default_rng(seed)
     secret_dir = g.normal(0, 1, size=secret_dim)
@@ -58,26 +62,26 @@ def restack_blocks(blocks, block_dim, shape):
 def inner_prod_with_secret(samples, secret_direction):
     return extract_blocks(samples, secret_direction.shape) @ secret_direction.flatten()
 
-def project_to_clwe(samples, secret_direction, gamma):
+def project_to_clwe(samples, secret_direction, gamma, beta=0):
     inner_prod = inner_prod_with_secret(samples, secret_direction)
     k = np.round(gamma * inner_prod)
     errors = k / gamma - inner_prod
+    if beta > 0:
+        errors += get_random_samples(errors.shape, var=beta)
     deltas = errors.reshape(-1, 1) @ secret_direction.reshape(1, -1)
     return samples + restack_blocks(deltas, secret_direction.shape, samples.shape)
 
 def get_hclwe_errors(samples, secret_direction, gamma):
     inner_prod = inner_prod_with_secret(samples, secret_direction)
-    return (gamma * inner_prod + 0.5) % 1 - 0.5
+    return np.abs((gamma * inner_prod + 0.5) % 1 - 0.5)
 
 def uniform_cdf(x):
-    return stats.uniform.cdf(x, -0.5, 1.0)
+    return stats.uniform.cdf(x, 0, 0.5)
 
 def get_hclwe_score(samples, secret_direction, gamma):
     return stats.kstest(get_hclwe_errors(samples, secret_direction, gamma),
                         uniform_cdf).statistic
 
-def uniform_cdf(x):
-    return stats.uniform.cdf(x, -0.5, 1.0)
 
 def get_watermark_from_conf(conf):
     if not conf or conf.get("type", "none") == "none":
@@ -112,11 +116,12 @@ class BaseCLWE:
     def __init__(self, conf) -> None:
         self.secret_dim = conf.secret_dim
         self.gamma = conf.gamma
+        self.beta = conf.beta
         self.seed = conf.seed
         self.secret = sample_unit_vector(self.secret_dim, self.seed)
     
     def inject_watermark(self, latents_np):
-        return project_to_clwe(latents_np, self.secret, self.gamma)
+        return project_to_clwe(latents_np, self.secret, self.gamma, self.beta)
 
     def get_errors(self, latents_np):
         return get_hclwe_errors(latents_np, self.secret, self.gamma)
