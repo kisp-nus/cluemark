@@ -3,7 +3,7 @@ include: [
 ]
 
 watermark:
-  gamma: 0.035
+  gamma: 0.03
   beta: 1
   dct: True
 
