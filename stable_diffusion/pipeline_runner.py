@@ -1,8 +1,8 @@
 import torch
 from torchvision import transforms
-from inverse_stable_diffusion import InversableStableDiffusionPipeline
+from stable_diffusion.inverse_stable_diffusion import InversableStableDiffusionPipeline
 from diffusers import DPMSolverMultistepScheduler
-from config import get_dtype
+from util.config import get_dtype
 import numpy as np
 import random
 

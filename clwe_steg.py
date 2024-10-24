@@ -9,11 +9,11 @@ import PIL
 
 import torch
 
-from inverse_stable_diffusion import InversableStableDiffusionPipeline
+from stable_diffusion.inverse_stable_diffusion import InversableStableDiffusionPipeline
 from diffusers import DPMSolverMultistepScheduler
 import open_clip
 from optim_utils import *
-from io_utils import *
+from tree_ring.io_utils import *
 from clwe_dwt import *
 
 

@@ -1,8 +1,8 @@
 import PIL
-from pipeline_runner import *
+from stable_diffusion.pipeline_runner import *
 from clwe_watermark import *
-from image_filters import *
-from config import *
+from util.image_filters import *
+from util.config import *
 from tqdm import trange
 from datasets import load_dataset
 import os

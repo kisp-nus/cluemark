@@ -1,8 +1,8 @@
 import PIL
-from pipeline_runner import *
-from clwe_watermark import *
-from image_filters import *
-from config import *
+from stable_diffusion.pipeline_runner import *
+from watermark import get_watermark_from_conf
+from util.image_filters import *
+from util.config import *
 from tqdm import trange
 import os
 
@@ -22,7 +22,7 @@ conf = get_config()
 print("Config:", OmegaConf.to_container(conf, resolve=True, throw_on_missing=False))
 
 runner = PipelineRunner(get_section(conf, "pipeline"))
-wm = get_watermark_from_conf(get_section(conf, "watermark"))
+wm = get_watermark_from_conf(get_section(conf, "watermark"), runner._pipe, conf.device)
 if not wm:
     raise ValueError("Must have a watermark")
 

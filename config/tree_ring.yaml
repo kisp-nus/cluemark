@@ -1,0 +1,28 @@
+include: [
+  "config/base.yaml",
+]
+
+watermark:
+  type: tree_ring
+  w_seed: 54321
+  w_channel: 0
+  w_pattern: "rand"
+  w_mask_shape: "circle"
+  w_radius: 10
+  w_measurement: "l1_complex"
+  w_injection: "complex"
+  w_pattern_const: 0.0
+
+filters:
+  - { type: "none" }
+  # - { type: "jpeg", quality: 95 }
+  # - { type: "jpeg", quality: 75 }
+  # - { type: "jpeg", quality: 25 }
+  # - { type: "crop", crop: 0.75, scale: 0.75 }
+  - { type: "rotate", degrees: 5 }
+  # - { type: "rotate", degrees: 15 }
+  # - { type: "brightness", factor: 5}
+  # - { type: "blur", radius: 2}
+  # - { type: "blur", radius: 4}
+
+output_path: "./images/tree_ring/"

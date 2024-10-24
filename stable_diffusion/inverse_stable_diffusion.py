@@ -15,7 +15,7 @@ from diffusers.schedulers import DDIMScheduler,PNDMScheduler, LMSDiscreteSchedul
 
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
-from modified_stable_diffusion import ModifiedStableDiffusionPipeline
+from stable_diffusion.modified_stable_diffusion import ModifiedStableDiffusionPipeline
 
 ### credit to: https://github.com/cccntu/efficient-prompt-to-prompt
 

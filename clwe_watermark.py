@@ -83,7 +83,7 @@ def get_hclwe_score(samples, secret_direction, gamma):
                         uniform_cdf).statistic
 
 
-def get_watermark_from_conf(conf):
+def get_clwe_watermark_from_conf(conf):
     if not conf or conf.get("type", "none") == "none":
         return None
     if conf.type != "clwe":
