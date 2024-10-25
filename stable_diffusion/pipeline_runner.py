@@ -2,6 +2,8 @@ import torch
 from torchvision import transforms
 from stable_diffusion.inverse_stable_diffusion import InversableStableDiffusionPipeline
 from diffusers import DPMSolverMultistepScheduler
+from datasets import load_dataset
+import json
 from util.config import get_dtype
 import numpy as np
 import random
@@ -14,6 +16,21 @@ def set_random_seed(seed=0):
     torch.cuda.manual_seed_all(seed + 4)
     random.seed(seed + 5)
 
+
+def get_dataset(dataset_name):
+    if 'laion' in dataset_name:
+        dataset = load_dataset(dataset_name)['train']
+        prompt_key = 'TEXT'
+    elif 'coco' in dataset_name:
+        with open('fid_outputs/coco/meta_data.json') as f:
+            dataset = json.load(f)
+            dataset = dataset['annotations']
+            prompt_key = 'caption'
+    else:
+        dataset = load_dataset(dataset_name)['test']
+        prompt_key = 'Prompt'
+
+    return dataset, prompt_key
 
 def transform_img(image, target_size=512):
     tform = transforms.Compose(
