@@ -18,6 +18,14 @@ def score_image(runner, wm, filter, img):
     latents = runner.invert_image(img)
     return wm.check_watermark(latents)
 
+def compare_maybe_tensor(a, b):
+    if torch.is_tensor(a):
+        return (a.cpu() != b.cpu()).any()
+    if isinstance(a, np.ndarray):
+        return (a != b).any()
+    else:
+        return a != b
+
 conf = get_config()
 print("Config:", OmegaConf.to_container(conf, resolve=True, throw_on_missing=False))
 
@@ -47,12 +55,10 @@ for i in trange(conf.start, conf.end):
         print(wm.get_state().keys())
     else:
         for k in wm_meta['watermark'].keys():
-            if isinstance(wm_meta['watermark'][k], np.ndarray) or torch.is_tensor(wm_meta['watermark'][k]):
-                if (wm_meta['watermark'][k] != wm.get_state()[k]).any():
-                    print("WARNING! WM meta and config don't match on", k)
-            else:
-                if wm_meta['watermark'][k] != wm.get_state()[k]:
-                    print("WARNING! WM meta and config don't match on", k)
+            if compare_maybe_tensor(wm_meta['watermark'][k], wm.get_state()[k]):
+                print("WARNING! WM meta and config don't match on", k)
+                print("WM meta", wm_meta['watermark'][k])
+                print("config", wm.get_state()[k])
 
     results = [i]
     for _, f in filters:
