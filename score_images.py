@@ -1,14 +1,28 @@
+from torchmetrics.image.inception import InceptionScore
 from torchmetrics.multimodal.clip_score import CLIPScore
+from torchvision.transforms import PILToTensor
 from util.image_filters import *
 from util.config import *
 from util.utils import *
 from tqdm import trange
 
-def calculate_clip_score(images, prompts, model = "openai/clip-vit-base-patch32"):
+def calculate_clip_score(images, prompts, batch_size = 10, model = "openai/clip-vit-base-patch32"):
+    assert len(images) == len(prompts)
     transform = transforms.Compose([transforms.ToTensor()])
-    image_tensors = [ transform(img) for img in images ]
     metric = CLIPScore(model)
-    return metric(image_tensors, prompts).item()
+    scores = []
+    for i in range(0, len(images), batch_size):
+        image_tensors = [ transform(img) for img in images[i : min(len(images), i + batch_size)] ]
+        scores.append(metric(image_tensors, prompts[i : i + len(image_tensors)]).item())
+    
+    return torch.mean(torch.tensor(scores)).item()
+
+def calculate_inception_score(images, batch_size = 10):
+    transform = transforms.Compose([PILToTensor()])
+    metric = InceptionScore()
+    images_tensor = torch.stack([ transform(img) for img in images ])
+    metric.update(images_tensor)
+    return metric.compute()
 
 conf = get_config()
 print("Config:", OmegaConf.to_container(conf, resolve=True, throw_on_missing=False))
@@ -25,5 +39,5 @@ for i in trange(conf.start, conf.end):
 
 assert len(images) == len(prompts)
 
-result = calculate_clip_score(images, prompts)
-print(result)
+print("clip", calculate_clip_score(images, prompts))
+print("inception", calculate_inception_score(images))
