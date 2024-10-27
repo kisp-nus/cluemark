@@ -5,8 +5,8 @@ include: [
 watermark:
   type: tree_ring
   w_seed: 54321
-  w_channel: 0
-  w_pattern: "rand"
+  w_channel: 3
+  w_pattern: "ring"
   w_mask_shape: "circle"
   w_radius: 10
   w_measurement: "l1_complex"
