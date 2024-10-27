@@ -22,7 +22,8 @@ def calculate_inception_score(images, batch_size = 10):
     metric = InceptionScore()
     images_tensor = torch.stack([ transform(img) for img in images ])
     metric.update(images_tensor)
-    return metric.compute()
+    result = metric.compute()
+    return result[0].item(), result[1].item()
 
 conf = get_config()
 print("Config:", OmegaConf.to_container(conf, resolve=True, throw_on_missing=False))
