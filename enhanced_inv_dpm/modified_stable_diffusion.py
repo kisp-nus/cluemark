@@ -1,4 +1,3 @@
-
 from typing import Callable, List, Optional, Union, Any, Dict
 import copy
 import numpy as np
@@ -128,16 +127,17 @@ class ModifiedStableDiffusionPipeline(StableDiffusionPipeline):
         do_classifier_free_guidance = guidance_scale > 1.0
 
         # 3. Encode input prompt
-        text_embeddings = self._encode_prompt(
+        text_embeddings_tuple = self.encode_prompt(
             prompt, device, num_images_per_prompt, do_classifier_free_guidance, negative_prompt
         )
-
+        text_embeddings = torch.cat([text_embeddings_tuple[1], text_embeddings_tuple[0]])
+        
         # 4. Prepare timesteps
         self.scheduler.set_timesteps(num_inference_steps, device=device)
         timesteps = self.scheduler.timesteps
 
         # 5. Prepare latent variables
-        num_channels_latents = self.unet.in_channels
+        num_channels_latents = self.unet.config.in_channels
         latents = self.prepare_latents(
             batch_size * num_images_per_prompt,
             num_channels_latents,
@@ -155,8 +155,12 @@ class ModifiedStableDiffusionPipeline(StableDiffusionPipeline):
         if watermarking_gamma is not None:
             watermarking_mask = torch.rand(latents.shape, device=device) < watermarking_gamma
 
-        # 6. Prepare extra step kwargs. TODO: Logic should ideally just be moved out of the pipeline
+        # 6. Prepare extra step kwargs.
         extra_step_kwargs = self.prepare_extra_step_kwargs(generator, eta)
+
+        self.unet = self.unet.float()
+        latents = latents.float()
+        text_embeddings = text_embeddings.float()
 
         # 7. Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
@@ -164,7 +168,6 @@ class ModifiedStableDiffusionPipeline(StableDiffusionPipeline):
             for i, t in enumerate(timesteps):
                 # add watermark
                 if watermarking_mask is not None:
-                    # latents[watermarking_mask] += watermarking_delta
                     latents[watermarking_mask] += watermarking_delta * torch.sign(latents[watermarking_mask])
 
                 # expand the latents if we are doing classifier free guidance
@@ -201,7 +204,7 @@ class ModifiedStableDiffusionPipeline(StableDiffusionPipeline):
         if not return_dict:
             return (image, has_nsfw_concept)
 
-        return ModifiedStableDiffusionPipelineOutput(images=image, nsfw_content_detected=has_nsfw_concept, init_latents=init_latents)
+        return ModifiedStableDiffusionPipelineOutput(images=image, nsfw_content_detected=has_nsfw_concept, init_latents=init_latents), latents
 
 
     @torch.inference_mode()

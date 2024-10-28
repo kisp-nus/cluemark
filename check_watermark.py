@@ -1,5 +1,5 @@
 import PIL
-from stable_diffusion.pipeline_runner import *
+from pipeline_runner import get_pipline_runner
 from watermark import get_watermark_from_conf
 from util.image_filters import *
 from util.config import *
@@ -10,7 +10,7 @@ import os
 conf = get_config()
 print("Config:", OmegaConf.to_container(conf, resolve=True, throw_on_missing=False))
 
-runner = PipelineRunner(get_section(conf, "pipeline"))
+runner = get_pipline_runner(get_section(conf, "pipeline"))
 wm = get_watermark_from_conf(get_section(conf, "watermark"), runner._pipe, conf.device)
 if not wm:
     raise ValueError("Must have a watermark")

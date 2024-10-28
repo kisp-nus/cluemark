@@ -1,26 +1,11 @@
 import PIL
-from stable_diffusion.pipeline_runner import *
+from pipeline_runner import get_pipline_runner, get_dataset
 from clwe_watermark import *
 from util.image_filters import *
 from util.config import *
 from tqdm import trange
 from datasets import load_dataset
 import os
-
-def get_dataset(dataset_name):
-    if 'laion' in dataset_name:
-        dataset = load_dataset(dataset_name)['train']
-        prompt_key = 'TEXT'
-    elif 'coco' in dataset_name:
-        with open('fid_outputs/coco/meta_data.json') as f:
-            dataset = json.load(f)
-            dataset = dataset['annotations']
-            prompt_key = 'caption'
-    else:
-        dataset = load_dataset(dataset_name)['test']
-        prompt_key = 'Prompt'
-
-    return dataset, prompt_key
 
 def calc_mse(l1, l2):
     err = l2 - l1
@@ -30,7 +15,7 @@ conf = get_config()
 print("Config:", OmegaConf.to_container(conf, resolve=True, throw_on_missing=False))
 
 dataset, prompt_key = get_dataset(conf.get("dataset", "Gustavosta/Stable-Diffusion-Prompts"))
-runner = PipelineRunner(get_section(conf, "pipeline"))
+runner = get_pipline_runner(get_section(conf, "pipeline"))
 wm = get_watermark_from_conf(get_section(conf, "watermark"))
 
 

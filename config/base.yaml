@@ -8,7 +8,6 @@ pipeline:
   num_inference_steps: 50
   image_width: 512
   device: ${device}
-  solver_order: 1
-  dtype: float32
+  solver_order: 0
 
 output_path: "./images/no_wm/"

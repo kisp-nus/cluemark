@@ -1,4 +1,4 @@
-from stable_diffusion.pipeline_runner import *
+from pipeline_runner import get_pipline_runner, get_dataset
 from watermark import get_watermark_from_conf
 from util.config import *
 from tqdm import trange
@@ -9,7 +9,7 @@ conf = get_config()
 print("Config:", OmegaConf.to_container(conf, resolve=True, throw_on_missing=False))
 
 dataset, prompt_key = get_dataset(conf.get("dataset", "Gustavosta/Stable-Diffusion-Prompts"))
-runner = PipelineRunner(get_section(conf, "pipeline"))
+runner = get_pipline_runner(get_section(conf, "pipeline"))
 wm = get_watermark_from_conf(get_section(conf, "watermark"), runner._pipe, conf.device)
 output_path = conf.output_path
 os.makedirs(output_path, exist_ok=True)
