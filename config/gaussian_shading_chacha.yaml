@@ -12,4 +12,4 @@ watermark:
   user_number: 1000000
   fpr: 0.000001
 
-output_path: "./images/gaussian_shading_chacha/"
+exp_name: gaussian_shading_chacha

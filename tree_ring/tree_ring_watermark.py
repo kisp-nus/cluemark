@@ -37,5 +37,5 @@ class TreeRingWatermark:
     def get_state(self):
         return {
             "conf": self.conf,
-            "gt_patch": self.gt_patch,
+            "gt_patch": self.gt_patch.to(torch.cfloat),
         }

@@ -10,4 +10,7 @@ pipeline:
   device: ${device}
   solver_order: 0
 
-output_path: "./images/no_wm/"
+exp_name: "no_wm"
+base_path: "./images/sdp/ddim"
+output_path: "${base_path}/${exp_name}"
+no_wm_path: "${base_path}/no_wm"

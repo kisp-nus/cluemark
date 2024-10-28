@@ -14,4 +14,4 @@ watermark:
   w_injection: "complex"
   w_pattern_const: 0.0
 
-output_path: "./images/tree_ring/"
+exp_name: tree_ring

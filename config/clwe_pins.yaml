@@ -7,4 +7,4 @@ watermark:
   gamma: 0.025
   dct: True
 
-output_path: "./images/clwe_pins/"
+exp_name: clwe_pins

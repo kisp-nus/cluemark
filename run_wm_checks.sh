@@ -70,6 +70,6 @@ fi
 
 if $CHECK_WM; then
     echo Checking watermarks for $1
-    python check_watermark.py $CONFIG_FILE device=$DEVICE start=$START end=$END no_wm_path=images/no_wm | tee results/${1}.txt
+    python check_watermark.py $CONFIG_FILE device=$DEVICE start=$START end=$END | tee results/ddim/${1}.txt
     cat results/${1}.txt
 fi

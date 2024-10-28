@@ -6,4 +6,4 @@ watermark:
   gamma: 0.3
   dwt_bands: ["LL"]
 
-output_path: "./images/clwe_dwt_ll/"
+exp_name: clwe_dwt_ll

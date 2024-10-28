@@ -10,4 +10,4 @@ watermark:
   beta: 0.1
   seed: 54321
 
-output_path: "./images/basic_clwe/"
+exp_name: basic_clwe
