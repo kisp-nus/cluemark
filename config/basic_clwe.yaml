@@ -1,5 +1,6 @@
 include: [
   "config/base.yaml",
+  "config/filters.yaml",
 ]
 
 watermark:
@@ -8,17 +9,5 @@ watermark:
   gamma: 0.5
   beta: 0.1
   seed: 54321
-
-filters:
-  - { type: "none" }
-  # - { type: "jpeg", quality: 95 }
-  # - { type: "jpeg", quality: 75 }
-  - { type: "jpeg", quality: 25 }
-  - { type: "crop", crop: 0.75, scale: 0.75 }
-  - { type: "rotate", degrees: 5 }
-  # - { type: "rotate", degrees: 15 }
-  - { type: "brightness", factor: 5}
-  - { type: "blur", radius: 2}
-  # - { type: "blur", radius: 4}
 
 output_path: "./images/basic_clwe/"

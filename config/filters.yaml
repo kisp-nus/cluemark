@@ -1,0 +1,11 @@
+filters:
+  - { type: "none" }
+  # - { type: "jpeg", quality: 95 }
+  # - { type: "jpeg", quality: 75 }
+  - { type: "jpeg", quality: 25 }
+  - { type: "crop", crop: 0.75, scale: 0.75 }
+  - { type: "rotate", degrees: 5 }
+  # - { type: "rotate", degrees: 15 }
+  - { type: "brightness", factor: 5}
+  - { type: "blur", radius: 2}
+  # - { type: "blur", radius: 4}

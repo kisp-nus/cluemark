@@ -1,5 +1,6 @@
 include: [
   "config/base.yaml",
+  "config/filters.yaml",
 ]
 
 watermark:
@@ -9,17 +10,5 @@ watermark:
   hw_copy: 8
   user_number: 1000000
   fpr: 0.000001
-
-filters:
-  - { type: "none" }
-  # - { type: "jpeg", quality: 95 }
-  # - { type: "jpeg", quality: 75 }
-  # - { type: "jpeg", quality: 25 }
-  # - { type: "crop", crop: 0.75, scale: 0.75 }
-  - { type: "rotate", degrees: 5 }
-  # - { type: "rotate", degrees: 15 }
-  # - { type: "brightness", factor: 5}
-  # - { type: "blur", radius: 2}
-  # - { type: "blur", radius: 4}
 
 output_path: "./images/gaussian_shading/"
