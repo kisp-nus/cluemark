@@ -36,7 +36,7 @@ def extract_auc_scores(filename):
     data = np.genfromtxt(filename, delimiter=',', skip_header=2)
     assert data.shape[1] == len(test_cases) * 2 + 1
     auc_scores = [ calc_auc(data[:, 2*i + 1], data[:, 2*i + 2]) for i in range(len(test_cases)) ]
-    return test_cases, auc_scores
+    return data.shape[0], test_cases, auc_scores
 
 if len(sys.argv) < 2:
     files = [
@@ -56,12 +56,12 @@ results_path = "results/"
 
 test_cases = None
 for f in files:
-    tests, auc_scores = extract_auc_scores(os.path.join(results_path, f + ".txt"))
+    n, tests, auc_scores = extract_auc_scores(os.path.join(results_path, f + ".txt"))
     if test_cases is None:
-        delim_print(["method"] + tests)
+        delim_print(["method", "n"] + tests)
         test_cases = tests
     if tests != test_cases:
         print("WARNING! test cases changed")
         print("was:", test_cases)
         print("now:", tests)
-    delim_print([f] + auc_scores)
+    delim_print([f, n] + auc_scores)
