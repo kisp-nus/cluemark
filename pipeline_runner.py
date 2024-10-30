@@ -18,14 +18,17 @@ def set_random_seed(seed=0):
 
 
 def get_dataset(dataset_name):
-    if 'laion' in dataset_name:
-        dataset = load_dataset(dataset_name)['train']
-        prompt_key = 'TEXT'
-    elif 'coco' in dataset_name:
+    if dataset_name == "sdp":
+        dataset = load_dataset("Gustavosta/Stable-Diffusion-Prompts")['test']
+        prompt_key = 'Prompt'
+    elif dataset_name == "coco":
         with open('fid_outputs/coco/meta_data.json') as f:
             dataset = json.load(f)
             dataset = dataset['annotations']
             prompt_key = 'caption'
+    elif 'laion' in dataset_name:
+        dataset = load_dataset(dataset_name)['train']
+        prompt_key = 'TEXT'
     else:
         dataset = load_dataset(dataset_name)['test']
         prompt_key = 'Prompt'

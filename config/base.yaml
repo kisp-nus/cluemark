@@ -1,4 +1,4 @@
-dataset: "Gustavosta/Stable-Diffusion-Prompts"
+dataset: sdp
 seed: 42
 device: ???
 
@@ -11,6 +11,6 @@ pipeline:
   solver_order: 0
 
 exp_name: "no_wm"
-base_path: "./images/sdp/ddim"
+base_path: "./images/${dataset}/ddim"
 output_path: "${base_path}/${exp_name}"
 no_wm_path: "${base_path}/no_wm"
