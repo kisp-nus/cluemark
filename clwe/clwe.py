@@ -65,7 +65,7 @@ def project_to_clwe(samples, secret_direction, gamma, beta=0):
     k = np.round(gamma * inner_prod)
     errors = k / gamma - inner_prod
     if beta > 0:
-        errors += get_random_samples(errors.shape, var=beta)
+        errors += get_random_samples(errors.shape, var=beta) / gamma
     deltas = errors.reshape(-1, 1) @ secret_direction.reshape(1, -1)
     return samples + restack_blocks(deltas, secret_direction.shape, samples.shape)
 
