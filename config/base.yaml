@@ -10,7 +10,20 @@ pipeline:
   device: ${device}
   solver_order: 0
 
+# To be overriden by experiments
 exp_name: "no_wm"
-base_path: "./images/${dataset}/ddim"
-output_path: "${base_path}/${exp_name}"
-no_wm_path: "${base_path}/no_wm"
+solver_name: "ddim"
+
+# Should be the same for all but can be modified
+images_folder: "./images"
+results_folder: "./results"
+exp_path: "${dataset}/${solver_name}"
+
+# Where to place output images
+output_path: "${images_folder}/${exp_path}/${exp_name}"
+
+# Where to look for unwatermarked images
+no_wm_path: "${images_folder}/${exp_path}/no_wm"
+
+# Where to write the results txt file
+results_file: "${results_folder}/${exp_path}/${exp_name}.txt"

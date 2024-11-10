@@ -20,17 +20,20 @@ wm_path = conf.output_path
 
 filters = get_filters(get_section(conf, "filters"))
 
-print(",".join(["i"] + [ f"{name}_no_wm,{name}_wm" for name, _ in filters ]))
+os.makedirs(os.path.dirname(conf.results_file), exist_ok=True)
+with open(conf.results_file, "w") as results_file:
+    print("# Config:", OmegaConf.to_container(conf, resolve=True, throw_on_missing=False), file=results_file)
+    print(",".join(["i"] + [ f"{name}_no_wm,{name}_wm" for name, _ in filters ]), file=results_file)
 
-for i in trange(conf.start, conf.end):
-    no_wm_img, no_wm_meta = load_image(no_wm_path, i)
-    wm_img, wm_meta = load_image(wm_path, i)
+    for i in trange(conf.start, conf.end):
+        no_wm_img, no_wm_meta = load_image(no_wm_path, i)
+        wm_img, wm_meta = load_image(wm_path, i)
 
-    compare_meta_and_state(no_wm_meta, wm_meta, wm.get_state())
-    
-    results = [i]
-    for _, f in filters:
-        results.append(score_image(runner, wm, no_wm_img, f))
-        results.append(score_image(runner, wm, wm_img, f))
+        compare_meta_and_state(no_wm_meta, wm_meta, wm.get_state())
+        
+        results = [i]
+        for _, f in filters:
+            results.append(score_image(runner, wm, no_wm_img, f))
+            results.append(score_image(runner, wm, wm_img, f))
 
-    print(",".join((str(i) for i in results)))
+        print(",".join((str(i) for i in results)), file=results_file)
