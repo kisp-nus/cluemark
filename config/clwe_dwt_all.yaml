@@ -3,7 +3,10 @@ include: [
 ]
 
 watermark:
-  gamma: 0.3
+  secret_dim: [4, 4, 4]
+  gamma: 1
+  beta: 0.01
+  seed: 54321
   dwt_bands: ["LL", "LH", "HL", "HH"]
 
 exp_name: clwe_dwt_all

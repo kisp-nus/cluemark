@@ -1,0 +1,16 @@
+include: [
+  "config/basic_clwe.yaml",
+]
+
+watermark:
+  type: clwe
+  secret_dim: [4, 1, 1]
+  gamma: 4
+  beta: 0.01
+  dwt_bands: ["LL", "LH", "HL", "HH"]
+
+filters:
+  - { type: "none" }
+  - { type: "jpeg", quality: 95 }
+
+exp_name: clwe_dwt_a

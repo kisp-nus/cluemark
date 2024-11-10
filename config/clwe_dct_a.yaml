@@ -1,0 +1,17 @@
+include: [
+  "config/basic_clwe.yaml",
+]
+
+watermark:
+  type: clwe
+  secret_dim: [4, 1, 1]
+  gamma: 0.4
+  beta: 0
+  dct: True
+  seed: 54321
+
+filters:
+  - { type: "none" }
+  - { type: "jpeg", quality: 95 }
+
+exp_name: clwe_dct_a
