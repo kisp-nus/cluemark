@@ -65,7 +65,7 @@ if [ ! -r "$CONFIG_FILE" ]; then
     exit 2
 fi
 
-if [ ! -d results ]; then
+if [ ! -d "$OUTPUT_FOLDER" ]; then
     mkdir -p "$OUTPUT_FOLDER"
 fi
 
