@@ -6,4 +6,4 @@ pipeline:
   solver_order: 1
   dtype: float32
 
-base_path: "./images/sdp/enhanced_inv_dpm"
+base_path: "./images/${dataset}/enhanced_inv_dpm"
