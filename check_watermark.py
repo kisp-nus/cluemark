@@ -20,8 +20,9 @@ wm_path = conf.output_path
 
 filters = get_filters(get_section(conf, "filters"))
 
+print("Writing results to", conf.results_file)
 os.makedirs(os.path.dirname(conf.results_file), exist_ok=True)
-with open(conf.results_file, "w") as results_file:
+with open(conf.results_file, "a") as results_file:
     print("# Config:", OmegaConf.to_container(conf, resolve=True, throw_on_missing=False), file=results_file)
     print(",".join(["i"] + [ f"{name}_no_wm,{name}_wm" for name, _ in filters ]), file=results_file)
 
@@ -36,4 +37,4 @@ with open(conf.results_file, "w") as results_file:
             results.append(score_image(runner, wm, no_wm_img, f))
             results.append(score_image(runner, wm, wm_img, f))
 
-        print(",".join((str(i) for i in results)), file=results_file)
+        print(",".join((str(i) for i in results)), file=results_file, flush=True)
