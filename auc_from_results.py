@@ -38,25 +38,11 @@ def extract_auc_scores(filename):
     auc_scores = [ calc_auc(data[:, 2*i + 1], data[:, 2*i + 2]) for i in range(len(test_cases)) ]
     return data.shape[0], test_cases, auc_scores
 
-if len(sys.argv) < 2:
-    files = [
-        "basic_clwe",
-        "clwe_dct",
-        "clwe_dwt_ll",
-        "clwe_dwt_lh_hl",
-        "clwe_dwt_all",
-        "clwe_dwt_ll_dct",
-        "clwe_dwt_lh_hl_dct",
-        "clwe_dwt_all_dct",
-    ]
-else:
-    files = sys.argv[1:]
-
-results_path = "results/"
+files = sys.argv[1:]
 
 test_cases = None
 for f in files:
-    n, tests, auc_scores = extract_auc_scores(os.path.join(results_path, f + ".txt"))
+    n, tests, auc_scores = extract_auc_scores(f)
     if test_cases is None:
         delim_print(["method", "n"] + tests)
         test_cases = tests
