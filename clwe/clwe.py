@@ -61,11 +61,13 @@ def inner_prod_with_secret(samples, secret_direction):
     return extract_blocks(samples, secret_direction.shape) @ secret_direction.flatten()
 
 def project_to_clwe(samples, secret_direction, gamma, beta=0):
+    gammap = np.sqrt(beta*beta + gamma*gamma)
     inner_prod = inner_prod_with_secret(samples, secret_direction)
-    k = np.round(gamma * inner_prod)
-    errors = k / gamma - inner_prod
+    k = np.round(gammap * inner_prod)
+    errors = k * gamma / gammap
     if beta > 0:
-        errors += get_random_samples(errors.shape, var=beta) / gamma
+        errors += get_random_samples(errors.shape, var=beta)
+    errors = (errors / gammap) - inner_prod
     deltas = errors.reshape(-1, 1) @ secret_direction.reshape(1, -1)
     return samples + restack_blocks(deltas, secret_direction.shape, samples.shape)
 
