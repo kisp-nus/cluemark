@@ -1,5 +1,6 @@
 include: [
   "config/base.yaml",
+  "config/filters.yaml",
 ]
 
 pipeline:

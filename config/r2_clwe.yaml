@@ -1,0 +1,20 @@
+include: [
+  "config/base.yaml",
+  "config/filters.yaml",
+]
+
+pipeline:
+  solver_order: 1
+  dtype: float32
+
+solver_name: "enh_inv_dpm"
+
+watermark:
+  type: clwe
+  secret_dim: [4, 4, 4]
+  gamma: 3.12
+  beta: 0.001
+  dwt_bands: ["LL", "LH", "HL", "HH"]
+  seed: 54321
+
+exp_name: r2_clwe
