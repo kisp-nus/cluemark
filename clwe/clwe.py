@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import stats
+import pycircstat as pcs
 
 
 def get_random_samples(dims, var=1/4):
@@ -73,11 +74,7 @@ def project_to_clwe(samples, secret_direction, gamma, beta=0):
 
 def get_hclwe_errors(samples, secret_direction, gamma):
     inner_prod = inner_prod_with_secret(samples, secret_direction)
-    return np.abs((gamma * inner_prod + 0.5) % 1 - 0.5)
-
-def uniform_cdf(x):
-    return stats.uniform.cdf(x, 0, 0.5)
+    return (gamma * inner_prod) % 1
 
 def get_hclwe_score(samples, secret_direction, gamma):
-    return stats.kstest(get_hclwe_errors(samples, secret_direction, gamma),
-                        uniform_cdf).statistic
+    return pcs.tests.rayleigh(2 * np.pi * get_hclwe_errors(samples, secret_direction, gamma))[0]

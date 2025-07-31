@@ -26,8 +26,8 @@ class NumpyWatermark:
                             device=latents.device, dtype=latents.dtype)
     
     def check_watermark(self, latents):
-        return stats.kstest(self._impl.get_errors(latents.numpy(force=True)),
-                            uniform_cdf).statistic
+        return pcs.tests.rayleigh(
+            2 * np.pi * self._impl.get_errors(latents.numpy(force=True)))[0]
     
     def get_state(self):
         return self._impl.get_state()
