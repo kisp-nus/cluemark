@@ -4,6 +4,7 @@ START=0
 END=10
 CHECK_WM=true
 GEN_IMG=true
+DATASET=""
 
 function usage {
     echo "Usage: $(basename $0) [options] config [device]"
@@ -15,7 +16,7 @@ function usage {
     echo "    -h help"
 }
 
-while getopts 'bs:e:nh' opt; do
+while getopts 'bs:e:d:nh' opt; do
   case "$opt" in
     b)
       CHECK_WM=false
@@ -31,6 +32,10 @@ while getopts 'bs:e:nh' opt; do
 
     n)
       GEN_IMG=false
+      ;;
+
+    d)
+      DATASET="dataset=$OPTARG"
       ;;
    
     ?|h)
@@ -61,10 +66,16 @@ fi
 
 if $GEN_IMG; then
     echo Generating images for $1
-    python generate_images.py $CONFIG_FILE device=$DEVICE start=$START end=$END
+    python generate_images.py $CONFIG_FILE "$DATASET" device=$DEVICE start=$START end=$END
 fi
 
 if $CHECK_WM; then
-    echo Checking watermarks for $1
-    python check_watermark.py $CONFIG_FILE device=$DEVICE start=$START end=$END
+    echo "Scoring images for $1"
+    python score_images.py $CONFIG_FILE "$DATASET" device=$DEVICE start=$START end=$END >> "results/$1_scores.txt"
+
+    echo "Checking watermarks for $1"
+    python check_watermark.py $CONFIG_FILE "$DATASET" device=$DEVICE start=$START end=$END
+
+    echo "Testing steganography attack on $1"
+    python steg_from_images.py $CONFIG_FILE "$DATASET" device=$DEVICE start=$START end=$END
 fi
