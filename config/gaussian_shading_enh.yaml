@@ -1,0 +1,20 @@
+include: [
+  "config/base.yaml",
+  "config/filters.yaml",
+]
+
+pipeline:
+  solver_order: 1
+  dtype: float32
+
+solver_name: "enh_inv_dpm"
+
+watermark:
+  type: gaussian_shading
+  seed: 12345
+  channel_copy: 1
+  hw_copy: 8
+  user_number: 1000000
+  fpr: 0.000001
+
+exp_name: gaussian_shading
