@@ -38,6 +38,14 @@ Options:
 * `-e` allows you to set an ending image number.
 * `-d` allows you to set the dataset. Default is `sdp` (Stable Diffusion Prompts), `coco` is also supported.
 
+To get AUC scores from output files use the `auc_from_results.py` file. Example:
+
+```bash
+python auc_from_results.py results/sdp/enh_inv_dpm/cluemark.txt
+```
+
+Note that depending on the orientation of the scoring, 0 or 1 might indicate success, while 0.5 is always worst. For comparison, you may need to invert AUC scores from some watermarks.
+
 ## Running Scripts
 
 All scripts are configured via [YAML](https://yaml.org) files, which are always the first command line arguments. This allows for tight control and reproduction of experiments across scripts. See the [Configuration](#Configuration) section below for configuration details. Example script invocation:
@@ -51,7 +59,7 @@ Available scripts:
 * `check_watermark.py` Applies configured filters to both the watermarked and non-watermarked images and scores both.
 * `score_images.py` applies FID to score distance of watermarked images to the unwatermarked images. NB: applies to the entire folder, ignores start and end options.
 * `steg_from_images.py` applies a steganographic attack to the watermarked images, then checks for watermark recovery.
-
+* `auc_from_results.py` does ***not*** take a configuration file, but rather the results CSV for watermark scores and computes AUC values.
 
 ## Configuration
 
