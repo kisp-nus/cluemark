@@ -52,7 +52,7 @@ except ImportError:
 
 
 try:
-    from inception import InceptionV3
+    from metrics.inception import InceptionV3
 except:
     from pytorch_fid.inception import InceptionV3
 

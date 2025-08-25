@@ -1,44 +1,44 @@
-from torchmetrics.image.inception import InceptionScore
-from torchmetrics.multimodal.clip_score import CLIPScore
-from torchvision.transforms import PILToTensor
-from util.image_filters import *
 from util.config import *
-from util.utils import *
-from tqdm import trange
-
-def calculate_clip_score(images, prompts, batch_size = 10, model = "openai/clip-vit-base-patch32"):
-    assert len(images) == len(prompts)
-    transform = transforms.Compose([transforms.ToTensor()])
-    metric = CLIPScore(model)
-    scores = []
-    for i in range(0, len(images), batch_size):
-        image_tensors = [ transform(img) for img in images[i : min(len(images), i + batch_size)] ]
-        scores.append(metric(image_tensors, prompts[i : i + len(image_tensors)]).item())
-    
-    return torch.mean(torch.tensor(scores)).item()
-
-def calculate_inception_score(images, batch_size = 10):
-    transform = transforms.Compose([PILToTensor()])
-    metric = InceptionScore()
-    images_tensor = torch.stack([ transform(img) for img in images ])
-    metric.update(images_tensor)
-    result = metric.compute()
-    return result[0].item(), result[1].item()
+from metrics.fid_score import calculate_fid_given_paths
+import os
 
 conf = get_config()
 print("Config:", OmegaConf.to_container(conf, resolve=True, throw_on_missing=False))
 
-image_path = conf.output_path
+def get_num_workers(conf):
+    if conf.get("num_workers") is not None:
+        return conf.num_workers
+    try:
+        num_cpus = len(os.sched_getaffinity(0))
+    except AttributeError:
+        # os.sched_getaffinity is not available under Windows, use
+        # os.cpu_count instead (which may not return the *available* number
+        # of CPUs).
+        num_cpus = os.cpu_count()
 
-print("Reading images")
-images = []
-prompts = []
-for i in trange(conf.start, conf.end):
-    img, meta = load_image(image_path, i)
-    images.append(img)
-    prompts.append(meta["prompt"])
+    return min(num_cpus, 8) if num_cpus is not None else 0
 
-assert len(images) == len(prompts)
+num_workers = get_num_workers(conf)
+print(f"Using {num_workers} workers")
 
-print("clip", calculate_clip_score(images, prompts))
-print("inception", calculate_inception_score(images))
+results_filename = conf.results_file
+if results_filename.endswith(".txt"):
+    results_filename = results_filename[:-4] + "-fid.txt"
+else:
+    results_filename += "-fid.txt"
+print("Writing results to", results_filename)
+
+fid_value = calculate_fid_given_paths(
+    [conf.no_wm_path, conf.output_path],
+    conf.get("batch_size", 50),
+    conf.device,
+    conf.get("fid_dims", 2048),
+    num_workers
+)
+
+print("FID: ", fid_value, flush=True)
+
+os.makedirs(os.path.dirname(results_filename), exist_ok=True)
+with open(results_filename, "a") as results_file:
+    print("# Config:", OmegaConf.to_container(conf, resolve=True, throw_on_missing=False), file=results_file)
+    print("FID: ", fid_value, file=results_file)
