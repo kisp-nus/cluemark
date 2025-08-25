@@ -8,11 +8,12 @@ pipeline:
   num_inference_steps: 50
   image_width: 512
   device: ${device}
-  solver_order: 0
+  solver_order: 1
+  dtype: float32
 
 # To be overriden by experiments
 exp_name: "no_wm"
-solver_name: "ddim"
+solver_name: "enh_inv_dpm"
 
 # Should be the same for all but can be modified
 images_folder: "./images"

@@ -3,12 +3,6 @@ include: [
   "config/filters.yaml",
 ]
 
-pipeline:
-  solver_order: 1
-  dtype: float32
-
-solver_name: "enh_inv_dpm"
-
 watermark:
   type: clwe
   secret_dim: [2, 4, 4]
@@ -17,4 +11,4 @@ watermark:
   dwt_bands: ["LL", "LH", "HL", "HH"]
   seed: 54321
 
-exp_name: r3_clwe_a
+exp_name: cluemark

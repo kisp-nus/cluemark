@@ -1,9 +1,0 @@
-include: [
-  "config/basic_clwe.yaml",
-]
-
-watermark:
-  gamma: 0.3
-  dwt_bands: ["LH", "HL"]
-
-exp_name: clwe_dwt_lh_hl
