@@ -13,6 +13,7 @@ function usage {
     echo "    -s [num] Start prompt number"
     echo "    -e [num] End prompt number"
     echo "    -n No image generation, just check watermarks"
+    echo "    -d [dataset] Dataset to use (default: use dataset from config)"
     echo "    -h help"
 }
 
@@ -71,7 +72,7 @@ fi
 
 if $CHECK_WM; then
     echo "Scoring images for $1"
-    python score_images.py $CONFIG_FILE "$DATASET" device=$DEVICE start=$START end=$END >> "results/$1_scores.txt"
+    python score_images.py $CONFIG_FILE "$DATASET" device=$DEVICE
 
     echo "Checking watermarks for $1"
     python check_watermark.py $CONFIG_FILE "$DATASET" device=$DEVICE start=$START end=$END
