@@ -9,6 +9,7 @@ CLUE-Mark requires PyTorch with the associated NVidia drivers, NumPy, MatPlotLib
 
 ```bash
 conda env create -n cluemark -f conda_env.yml
+conda activate cluemark
 ```
 
 ## Quickstart
