@@ -51,7 +51,7 @@ Note that depending on the orientation of the scoring, 0 or 1 might indicate suc
 
 Unless configured otherwise, images are output to the `images/` folder while all other output data is written to `results/`. In both cases, output is grouped into subfolders by dataset, solver, and experiment. For example, the watermark detection data for CLUE-Mark on Stable Diffusion Prompts using the enhanced inverse DPM solver will be output to `results/sdp/enh_inv_dpm/cluemark.txt`, while output for Gaussian Shading using DDIM on the coco dataset is written to `results/coco/ddim/gaussian_shading.txt`.
 
-****All results data is append-only in CSV format.**** If you restart the pipeline or run it twice, you will end up with a text file with two sets of data. After which, if you try to run the AUC script you will get an error similar to `Input contains NaN`. This is intentional: it forces you to check that the file is consistent before running the AUC script, while avoiding any possible data loss.
+****All results data is append-only in CSV format.**** If you restart the pipeline or run it twice, you will end up with a text file with two sets of data, including a double-header. After which, if you try to run the AUC script you will get an error similar to `Input contains NaN`. This is intentional: it forces you to check that the file is consistent before running the AUC script, while avoiding any possible data loss. To fix this, remove the extra header and make sure the data is correct before running the AUC script.
 
 A quick description of the output files:
 
