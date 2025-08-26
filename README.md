@@ -1,7 +1,7 @@
 # CLUE-Mark
 ****Watermarking diffusion model outputs using CLWE****
 
-This is the proof-of-concept of the CLUE-Mark system for watermarking diffusion model images. For theory and background on CLUE-Mark's construction, see our paper.
+This is the proof-of-concept of the CLUE-Mark system for watermarking diffusion model images. For theory and background on CLUE-Mark's construction, see our [paper](https://maps.kisp-lab.org/cluemark/).
 
 ## Setup
 
