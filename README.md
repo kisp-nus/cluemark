@@ -47,6 +47,20 @@ python auc_from_results.py results/sdp/enh_inv_dpm/cluemark.txt
 
 Note that depending on the orientation of the scoring, 0 or 1 might indicate success, while 0.5 is always worst. For comparison, you may need to invert AUC scores from some watermarks.
 
+## Outputs
+
+Unless configured otherwise, images are output to the `images/` folder while all other output data is written to `results/`. In both cases, output is grouped into subfolders by dataset, solver, and experiment. For example, the watermark detection data for CLUE-Mark on Stable Diffusion Prompts using the enhanced inverse DPM solver will be output to `results/sdp/enh_inv_dpm/cluemark.txt`, while output for Gaussian Shading using DDIM on the coco dataset is written to `results/coco/ddim/gaussian_shading.txt`.
+
+****All results data is append-only in CSV format.**** If you restart the pipeline or run it twice, you will end up with a text file with two sets of data. After which, if you try to run the AUC script you will get an error similar to `Input contains NaN`. This is intentional: it forces you to check that the file is consistent before running the AUC script, while avoiding any possible data loss.
+
+A quick description of the output files:
+
+* The `[exp_name].txt` file contains the watermark scores for the various filters configured with and without watermarks.
+* The `[exp_name]-steg.txt` file contains the watermark scores after applying a steganographic attack vs the unwatermarked image.
+* The `[exp_name]-fid.txt` file contains the FID distance of *all* the watermarked images vs the unwatermarked images in the given folder. This distance is meant to be a measure of quality, but is really a measure of similarity between the watermarked and unwatermarked images, with lower scores meaning more similar.
+
+For the first two files, using the `auc_from_results.py` script will give you the Area Under the Curve (AUC) of the Receiver Operating Characteristic for the watermark resutls, with 1.0 indicating perfect distinguishing of watermarked and unwatermarked cases, while 0.5 is equivalent to random guessing. A score less than 0.5 indicates that the labels are flipped (which occurs in some configurations, simply subtract from 1 to compare to others). See the paper for more details on how to interpret these results.
+
 ## Running Scripts
 
 All scripts are configured via [YAML](https://yaml.org) files, which are always the first command line arguments. This allows for tight control and reproduction of experiments across scripts. See the [Configuration](#Configuration) section below for configuration details. Example script invocation:
